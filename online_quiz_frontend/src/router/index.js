@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import QuestionView from '../views/QuestionView.vue'
+import CourseView from '../views/CourseView.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import DefaultLayout from '../components/DefaultLayout.vue'
@@ -17,7 +18,8 @@ const router = createRouter({
       meta: {requiresAuth: true},
       children: [
         { path: '/home', name: 'Home', component: HomeView },
-        { path: '/question', name: 'Question', component: QuestionView }
+        { path: '/question', name: 'Question', component: QuestionView },
+        { path: '/course', name: 'Course', component: CourseView }
       ]
       
 

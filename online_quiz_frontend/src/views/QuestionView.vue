@@ -1,6 +1,7 @@
 <template>
     <div class="w-full px-4 py-16">
       <div class="mx-auto w-full max-w-md">
+        {{ question }}
         <RadioGroup v-model="selected">
           <RadioGroupLabel class="sr-only">Server size</RadioGroupLabel>
           <div class="space-y-2">
@@ -70,6 +71,8 @@
   
   <script setup>
   import { ref } from 'vue'
+  import { onMounted, computed } from 'vue';
+  import store from "../store"
   import {
     RadioGroup,
     RadioGroupLabel,
@@ -97,7 +100,19 @@
       disk: '1024 GB SSD disk',
     },
   ]
+  onMounted(getQuestion);
   
+  function getQuestion() {
+    store
+      .dispatch('questions', store.state)
+      .then((question)=>{
+      })
+    
+      }
+
+      const question = computed(() => {
+      return store.state.question;
+    }); 
   const selected = ref(plans[0])
   </script>
   
