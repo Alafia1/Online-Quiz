@@ -189,7 +189,7 @@ const store = createStore ({
             state.currentQuestionIndex = 0;
             state.answers = [];
             state.course = null;
-            state.question = null
+            state.question = []
         }
     },
     modules: {},

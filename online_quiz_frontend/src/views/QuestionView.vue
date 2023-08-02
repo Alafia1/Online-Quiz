@@ -7,7 +7,7 @@
       <div class="basis-1/2 flex">
         Time Remaining
       </div>
-      <div class="mt-4 mr-3 flex">
+      <div class="my-2 mr-3 flex">
         <button
           type="button"
           class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -17,7 +17,7 @@
         </button>
       </div>
     </div>
-    <h1>Name</h1>
+    <h1>{{ name }}</h1>
     <hr />
     <div class="flex flex-row">
         <div class=" basis-1/2 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -122,6 +122,7 @@
     },
   });
   const button = computed(() => (currentQuestionIndex.value == questions.value.length-1) ? "Finish" : "Next" )
+  const name = computed(() => store.state.user.data.name )
 
   const saveAnswerAndNext = () => {
     console.log(questions.value.length)
