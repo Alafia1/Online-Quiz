@@ -1,84 +1,112 @@
 <template>
-    <div class="w-full px-4 py-16">
-      <div class="mx-auto w-full max-w-md">
-        {{ question }}
-        <RadioGroup v-model="selected">
-          <RadioGroupLabel class="sr-only">Server size</RadioGroupLabel>
-          <div class="space-y-2">
-            <RadioGroupOption
-              as="template"
-              v-for="plan in plans"
-              :key="plan.name"
-              :value="plan"
-              v-slot="{ active, checked }"
-            >
-              <div
-                :class="[
-                  active
-                    ? 'ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300'
-                    : '',
-                  checked ? 'bg-sky-900 bg-opacity-75 text-white ' : 'bg-white ',
-                ]"
-                class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none"
-              >
-                <div class="flex w-full items-center justify-between">
-                  <div class="flex items-center">
-                    <div class="text-sm">
-                      <RadioGroupLabel
-                        as="p"
-                        :class="checked ? 'text-white' : 'text-gray-900'"
-                        class="font-medium"
-                      >
-                        {{ plan.name }}
-                      </RadioGroupLabel>
-                      <RadioGroupDescription
-                        as="span"
-                        :class="checked ? 'text-sky-100' : 'text-gray-500'"
-                        class="inline"
-                      >
-                        <span> {{ plan.ram }}/{{ plan.cpus }}</span>
-                        <span aria-hidden="true"> &middot; </span>
-                        <span>{{ plan.disk }}</span>
-                      </RadioGroupDescription>
-                    </div>
-                  </div>
-                  <div v-show="checked" class="shrink-0 text-white">
-                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none">
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="12"
-                        fill="#fff"
-                        fill-opacity="0.2"
-                      />
-                      <path
-                        d="M7 13l3 3 7-7"
-                        stroke="#fff"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </RadioGroupOption>
-          </div>
-        </RadioGroup>
+  <div class="m-10 border border-gray-400 border-solid rounded-lg">
+    <div class="flex flex-row">
+      <div class=" basis-1/2 flex">
+        Here We go
+      </div>
+      <div class="basis-1/2 flex">
+        Time Remaining
+      </div>
+      <div class="mt-4 mr-3 flex">
+        <button
+          type="button"
+          class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          @click="saveAnswerAndNext"
+        >
+          Next
+        </button>
       </div>
     </div>
-  </template>
+    <h1>Name</h1>
+    <hr />
+    <div class="flex flex-row">
+        <div class=" basis-1/2 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+              <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">{{ currentQuestion.question }}</h2>
+            </div>
+        
+        </div>
+        <div class="basis-1/2">
+          <div class="w-full px-4 py-16">
+            <div class="mx-auto w-full max-w-md">
+              <RadioGroup v-model="selectedAnswer">
+                <RadioGroupLabel class="sr-only">Server size</RadioGroupLabel>
+                <div class="space-y-2">
+                  <RadioGroupOption
+                    as="template"
+                    v-for="item in currentQuestion.options"
+                    :key="item.id"
+                    :value="item"
+                    v-slot="{ active, checked }"
+                  >
+                    <div
+                      :class="[
+                        active
+                          ? 'ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300'
+                          : '',
+                        checked ? 'bg-gray-900 bg-opacity-75 text-white ' : 'bg-white ',
+                      ]"
+                      class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none"
+                    >
+                      <div class="flex w-full items-center justify-between">
+                        <div class="flex items-center">
+                          <div class="text-sm">
+                            <RadioGroupLabel
+                              as="p"
+                              :class="checked ? 'text-white' : 'text-gray-900'"
+                              class="font-medium"
+                            >
+                              {{ item.option }}
+                            </RadioGroupLabel>
+                          </div>
+                        </div>
+                        <div v-show="checked" class="shrink-0 text-white">
+                          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none">
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="12"
+                              fill="#fff"
+                              fill-opacity="0.2"
+                            />
+                            <path
+                              d="M7 13l3 3 7-7"
+                              stroke="#fff"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </RadioGroupOption>
+                </div>
+              </RadioGroup>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
   
-  <script setup>
+  
+  
+  
+</template>
+  
+<script setup>
   import { ref } from 'vue'
   import { onMounted, computed } from 'vue';
-  import store from "../store"
+  //import store from "../store"
+  import { useStore } from 'vuex';
   import {
     RadioGroup,
     RadioGroupLabel,
-    RadioGroupDescription,
     RadioGroupOption,
   } from '@headlessui/vue'
+  
+
+  const store = useStore();
   
   const plans = [
     {
@@ -100,19 +128,25 @@
       disk: '1024 GB SSD disk',
     },
   ]
-  onMounted(getQuestion);
-  
-  function getQuestion() {
-    store
-      .dispatch('questions', store.state)
-      .then((question)=>{
-      })
-    
-      }
 
-      const question = computed(() => {
-      return store.state.question;
-    }); 
-  const selected = ref(plans[0])
-  </script>
+  const questions = computed(() => store.state.question); 
+
+  const currentQuestionIndex = computed(() => store.state.currentQuestionIndex);
+  const currentQuestion = computed(() => questions.value[currentQuestionIndex.value]);
+  const selectedAnswer = computed({
+    get: () => currentQuestion.value.selectedAnswer,
+    set: (value) => {
+      store.commit('selectAnswer', { questionIndex: currentQuestionIndex.value, answer: value });
+    },
+  });
+
+  const saveAnswerAndNext = () => {
+    console.log(questions.value.length)
+    if (currentQuestionIndex.value < questions.value.length - 1) {
+      store.commit('nextQuestion');
+    } else {
+      // Handle end of the quiz, maybe show a summary or navigate to another page
+    }
+  };
+</script>
   

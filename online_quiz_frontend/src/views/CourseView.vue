@@ -122,11 +122,17 @@ import store from "../store"
       const router = useRouter()
       const isOpen = ref(false)
       
-      function closeModal(index) {
+      function closeModal() {
         isOpen.value = false;
+        store.commit('setQuestion')
         router.push({
           name: 'Question'
+        }).then(() => {
+            console.log('Navigation successful!');
         })
+        .catch((error) => {
+            console.error('Navigation failed:', error);
+        });
         
       }
       function openModal(index) {

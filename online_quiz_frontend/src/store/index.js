@@ -122,7 +122,9 @@ const store = createStore ({
         },
         quiz: {...quizs},
         course: null,
-        question: {}
+        question: [],
+        currentQuestionIndex: 0,
+        answers: [],
 
     },
     getters: {},
@@ -154,9 +156,29 @@ const store = createStore ({
         setQuestion:(state) => {
             for (const item of courses){
                 if(item.quiz_id === state.course){
-                    state.question = {...item}
+                    state.question = item.question
                     break
                 }
+            }
+        },
+        nextQuestion(state) {
+            state.currentQuestionIndex++;
+        },
+        selectAnswer(state, { questionIndex, answer }) {
+            let found = false;
+            const ans = {
+                id: questionIndex,
+                answer: answer
+            }
+            for (let i = 0; i < state.answers.length; i++){
+                if(state.answers[i].id === questionIndex){
+                    state.answers[i] = ans;
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                state.answers.push(ans);
             }
         }
     },
