@@ -1,5 +1,11 @@
 import { createStore } from "vuex";
 import axiosClient from '../axios.js'
+import VuexPersister from 'vuex-persister';
+
+const vuexPersister = new VuexPersister({
+  key: 'myAppStore', // The key used to store the data in LocalStorage/SessionStorage
+  storage: localStorage, // Choose between localStorage or sessionStorage
+});
 
 const quizs = [
     {
@@ -117,7 +123,6 @@ const store = createStore ({
     state: {
         user: {
             data: {},
-            details: sessionStorage.getItem("DATA"),
             token: sessionStorage.getItem("TOKEN"),
         },
         quiz: {...quizs},
@@ -151,7 +156,6 @@ const store = createStore ({
             state.user.token = userData.token;
             state.user.data = userData.user;
             sessionStorage.setItem("TOKEN", userData.token)
-            sessionStorage.setItem("DATA", userData.user)
         },
         setQuestion:(state) => {
             for (const item of courses){
@@ -189,6 +193,7 @@ const store = createStore ({
         }
     },
     modules: {},
+    plugins: [vuexPersister.persist],
 });
 
 export default store;
