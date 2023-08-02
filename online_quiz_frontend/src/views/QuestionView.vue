@@ -13,7 +13,7 @@
           class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           @click="saveAnswerAndNext"
         >
-          Next
+          {{ button }}
         </button>
       </div>
     </div>
@@ -97,7 +97,7 @@
 <script setup>
   import { ref } from 'vue'
   import { onMounted, computed } from 'vue';
-  //import store from "../store"
+  import { useRouter } from 'vue-router'
   import { useStore } from 'vuex';
   import {
     RadioGroup,
@@ -107,27 +107,9 @@
   
 
   const store = useStore();
+  const router = useRouter()
   
-  const plans = [
-    {
-      name: 'Startup',
-      ram: '12GB',
-      cpus: '6 CPUs',
-      disk: '160 GB SSD disk',
-    },
-    {
-      name: 'Business',
-      ram: '16GB',
-      cpus: '8 CPUs',
-      disk: '512 GB SSD disk',
-    },
-    {
-      name: 'Enterprise',
-      ram: '32GB',
-      cpus: '12 CPUs',
-      disk: '1024 GB SSD disk',
-    },
-  ]
+  
 
   const questions = computed(() => store.state.question); 
 
@@ -139,13 +121,21 @@
       store.commit('selectAnswer', { questionIndex: currentQuestionIndex.value, answer: value });
     },
   });
+  const button = computed(() => (currentQuestionIndex.value == questions.value.length-1) ? "Finish" : "Next" )
 
   const saveAnswerAndNext = () => {
     console.log(questions.value.length)
-    if (currentQuestionIndex.value < questions.value.length - 1) {
+    if (currentQuestionIndex.value == 2) {
       store.commit('nextQuestion');
-    } else {
-      // Handle end of the quiz, maybe show a summary or navigate to another page
+    }
+    else if (currentQuestionIndex.value < questions.value.length - 1) {
+      store.commit('nextQuestion');
+    } 
+    else{
+      store.commit('finish');
+      router.push({
+          name: 'Course'
+        })
     }
   };
 </script>

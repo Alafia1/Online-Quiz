@@ -180,6 +180,12 @@ const store = createStore ({
             if(!found){
                 state.answers.push(ans);
             }
+        },
+        finish(state) {
+            state.currentQuestionIndex = 0;
+            state.answers = [];
+            state.course = null;
+            state.question = null
         }
     },
     modules: {},
