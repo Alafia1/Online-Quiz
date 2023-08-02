@@ -5,7 +5,7 @@
         Here We go
       </div>
       <div class="basis-1/2 flex">
-        Time Remaining
+        Time Remaining {{ formattedTimer }}
       </div>
       <div class="my-2 mr-3 flex">
         <button
@@ -139,5 +139,31 @@
         })
     }
   };
+
+  const timerValue = computed(() => store.state.timerValue);
+  const timerText = ref(formatTimer(timerValue.value));
+  const formattedTimer = ref(formatTimer(timerValue.value));
+
+  function formatTimer(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  function updateTimer() {
+    if (timerValue.value > 0) {
+      store.commit('setTimerValue', timerValue.value - 1);
+      formattedTimer.value = formatTimer(timerValue.value);
+    } else {
+      clearInterval(timerInterval);
+      
+    }
+  }
+
+  let timerInterval;
+
+  onMounted(() => {
+    timerInterval = setInterval(updateTimer, 1000);
+  });
 </script>
   

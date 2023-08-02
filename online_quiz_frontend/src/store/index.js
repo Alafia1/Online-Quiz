@@ -130,6 +130,7 @@ const store = createStore ({
         question: [],
         currentQuestionIndex: 0,
         answers: [],
+        timerValue: 150
 
     },
     getters: {},
@@ -190,7 +191,10 @@ const store = createStore ({
             state.answers = [];
             state.course = null;
             state.question = []
-        }
+        },
+        setTimerValue(state, newValue) {
+            state.timerValue = newValue;
+          },
     },
     modules: {},
     plugins: [vuexPersister.persist],
