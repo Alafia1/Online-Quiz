@@ -4,8 +4,12 @@
       <div class=" basis-1/2 flex">
         Here We go
       </div>
-      <div class="basis-1/2 flex">
-        Time Remaining {{ formattedTimer }}
+      <div class="basis-1/2 flex mt-2">
+        <div 
+        :class="timer.minutes == 0 ? 'text-red-700' : 'text-blue-900'" 
+        class="w-15 h-9 px-4 py-2 rounded-md border border-transparent bg-blue-100 text-sm font-medium  hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
+          {{ timer.minutes }} : {{ timer.seconds }}
+        </div>
       </div>
       <div class="my-2 mr-3 flex">
         <button
@@ -96,14 +100,15 @@
   
 <script setup>
   import { ref } from 'vue'
-  import { onMounted, computed } from 'vue';
-  import { useRouter } from 'vue-router'
+  import { onMounted, computed, watchEffect } from 'vue';
+  import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
   import {
     RadioGroup,
     RadioGroupLabel,
     RadioGroupOption,
   } from '@headlessui/vue'
+  import { useTimer } from 'vue-timer-hook';
   
 
   const store = useStore();
@@ -140,30 +145,24 @@
     }
   };
 
-  const timerValue = computed(() => store.state.timerValue);
-  const timerText = ref(formatTimer(timerValue.value));
-  const formattedTimer = ref(formatTimer(timerValue.value));
-
-  function formatTimer(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-  }
-
-  function updateTimer() {
-    if (timerValue.value > 0) {
-      store.commit('setTimerValue', timerValue.value - 1);
-      formattedTimer.value = formatTimer(timerValue.value);
-    } else {
-      clearInterval(timerInterval);
-      
-    }
-  }
-
-  let timerInterval;
+  const timerValue = store.state.course;
+  console.log(timerValue)
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 100); // 10 minutes timer
+  const timer = useTimer(time);
 
   onMounted(() => {
-    timerInterval = setInterval(updateTimer, 1000);
+    timer.start();
+    watchEffect(async () => {
+      if(timer.isExpired.value) {
+        console.warn('IsExpired')
+        //store.commit('finish');
+        //router.push({
+            //name: 'Course'
+          //})
+      }
+    })
+    //timerInterval = setInterval(updateTimer, 1000);
   });
 </script>
   

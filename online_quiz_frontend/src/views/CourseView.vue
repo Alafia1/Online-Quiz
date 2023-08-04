@@ -6,8 +6,8 @@
       </header>
       <main>
         <div class="mx-auto max-w-7xl">
-            <div class="m-5 border border-gray-400 border-solid rounded-lg">
-                <div class="flex flex-row">
+            <div class="m-5 lg:mt-20 sm:mt-3 border border-gray-400 border-solid rounded-lg">
+                <div class="flex xsm:flex-col lg:flex-row">
                     <!-- Card -->
                     <div v-for="quiz in quizs" :key="quiz.id">
                         <div class="m-8 border border-gray-400 border-solid rounded-lg">

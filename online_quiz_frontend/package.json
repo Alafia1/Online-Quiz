@@ -17,6 +17,7 @@
     "headlessui": "^0.0.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
+    "vue-timer-hook": "^1.0.84",
     "vuex": "^4.1.0",
     "vuex-persister": "^1.0.0"
   },
