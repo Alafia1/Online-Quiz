@@ -145,21 +145,20 @@
     }
   };
 
-  const timerValue = store.state.course;
+  const timerValue = store.state.questionTime;
   console.log(timerValue)
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 100); // 10 minutes timer
+  time.setSeconds(time.getSeconds() + timerValue); // 10 minutes timer
   const timer = useTimer(time);
 
   onMounted(() => {
     timer.start();
     watchEffect(async () => {
       if(timer.isExpired.value) {
-        console.warn('IsExpired')
-        //store.commit('finish');
-        //router.push({
-            //name: 'Course'
-          //})
+        store.commit('finish');
+        router.push({
+            name: 'Course'
+          })
       }
     })
     //timerInterval = setInterval(updateTimer, 1000);
