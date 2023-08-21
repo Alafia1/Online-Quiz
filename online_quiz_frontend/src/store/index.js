@@ -125,7 +125,7 @@ const store = createStore ({
             data: {},
             token: sessionStorage.getItem("TOKEN"),
         },
-        quiz: {...quizs},
+        quiz: [],
         course: null,
         question: [],
         currentQuestionIndex: 0,
@@ -143,6 +143,12 @@ const store = createStore ({
         login({commit}, user){
             return axiosClient.post('/login', user).then(({data})=>{
                 commit('setUser', data);
+                return data;
+            })
+        },
+        addQuiz({commit}, quiz){
+            return axiosClient.post('/addquiz', quiz).then(({data})=>{
+                commit('addNewQuiz', data);
                 return data;
             })
         },
@@ -184,6 +190,9 @@ const store = createStore ({
             if(!found){
                 state.answers.push(ans);
             }
+        },
+        addNewQuiz(state, newQuiz){
+            state.quiz.push(quiz);
         },
         finish(state) {
             state.currentQuestionIndex = 0;

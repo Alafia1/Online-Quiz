@@ -65,7 +65,7 @@ const router = useRouter()
       .dispatch('login', user)
       .then(()=>{
         router.push({
-          name: 'Home'
+          name: 'Course'
         })
       })
       .catch(err => {
