@@ -192,7 +192,7 @@ const store = createStore ({
             }
         },
         addNewQuiz(state, newQuiz){
-            state.quiz.push(quiz);
+            state.quiz = newQuiz.quiz;
         },
         finish(state) {
             state.currentQuestionIndex = 0;

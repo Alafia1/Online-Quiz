@@ -49,7 +49,12 @@
   };
 
   function save() {
-    store.dispatch('addQuiz', quiz);
+    store.dispatch('addQuiz', quiz)
+    .then(()=>{
+        router.push({
+          name: 'Course'
+        })
+      });
   }
 
 </script>

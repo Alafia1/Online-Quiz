@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quizs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Quiz extends Controller
 {
@@ -11,7 +13,8 @@ class Quiz extends Controller
      */
     public function index()
     {
-        //
+        $data = Quizs::all();
+        return response($data);
     }
 
     /**
@@ -27,7 +30,21 @@ class Quiz extends Controller
      */
     public function store(Request $request)
     {
-
+        $userId = Auth::id();
+        $data = $request->validate([
+            'title' => 'required|string',
+            'time' => 'required',
+            'questions' => 'required',
+        ]);
+        $quiz = Quizs::create([
+            'title' => $data['title'],
+            'time' => $data['time'],
+            'questions' => $data['questions'],
+            'user_id' => $userId,
+        ]);
+        return response([
+            'quiz' => $quiz
+        ]);
     }
 
     /**
