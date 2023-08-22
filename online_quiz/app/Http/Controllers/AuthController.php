@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quizs;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,10 +28,13 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
         $token = $user->createToken('main')->plainTextToken;
+        $userId = Auth::id();
+        $quizzes = Quizs::where('user_id', $userId)->get();
 
         return response([
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'quizzes' => $quizzes
         ]);
     }
 
@@ -54,10 +58,12 @@ class AuthController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
+        $quizzes = Quizs::where('user_id', $user['id'])->get();
 
         return response([
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'quizzes' => $quizzes
         ]);
     }
 

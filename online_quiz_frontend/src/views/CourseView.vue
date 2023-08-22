@@ -28,7 +28,7 @@
                                     <span>
                                         <QuestionMarkCircleIcon class="h-5 w-5 text-gray-600" />
                                     </span> 
-                                    <p>{{ quiz.question }} questions</p>
+                                    <p>{{ quiz.questions }} questions</p>
                                 </div>
                                 <div class="flex py-6 w-full justify-center">
                                     <button @click="openModal(quiz.id)" class="flex w-full justify-center items-center rounded bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
@@ -40,23 +40,6 @@
                             </div> 
                         </div>
                     </div>
-                    <div class="m-8 border border-gray-400 border-solid rounded-lg">
-                      <div class=" flex-1 flex-col items-center justify-center px-3 py-3 lg:px-5">
-                          <div class="flex -space-x-2 overflow-hidden items-center justify-center">
-                            <PlusIcon @click="newQuiz"
-                            class="h-28 w-28 text-gray-600 hover:text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"/>
-                            
-                          </div> 
-                          
-                          <div class="flex mt-8 py-6 w-full justify-center">
-                              <button @click="newQuiz" class="flex w-full justify-center items-center rounded bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
-                                  New Quiz
-                              </button>
-                              
-                          </div>
-                          
-                      </div> 
-                  </div>
                     <TransitionRoot appear :show="isOpen" as="template">
                       <Dialog as="div" @close="cancelModal" class="relative z-10">
                         <TransitionChild
@@ -91,12 +74,12 @@
                                   as="h3"
                                   class="text-lg font-medium leading-6 text-gray-900"
                                 >
-                                  {{ test.title }}
+                                  {{ getSelectedQuiz.title }}
                                 </DialogTitle>
                                 <div class="mt-2">
                                   <p class="text-sm text-gray-500">
                                       You are about to take the above test.<br>
-                                      You have {{ test.time }} mins to answer {{ test.question }} questions.<br>
+                                      You have {{ getSelectedQuiz.time }} mins to answer {{ getSelectedQuiz.questions }} questions.<br>
                                       Make sure you submit the test before the time elapses.
                                   </p>
                                 </div>
@@ -116,6 +99,24 @@
                         </div>
                       </Dialog>
                     </TransitionRoot>
+                    <div class="m-8 border border-gray-400 border-solid rounded-lg">
+                      <div class=" flex-1 flex-col items-center justify-center px-3 py-3 lg:px-5">
+                          <div class="flex -space-x-2 overflow-hidden items-center justify-center">
+                            <PlusIcon @click="newQuiz"
+                            class="h-28 w-28 text-gray-600 hover:text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"/>
+                            
+                          </div> 
+                          
+                          <div class="flex mt-8 py-6 w-full justify-center">
+                              <button @click="newQuiz" class="flex w-full justify-center items-center rounded bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                                  New Quiz
+                              </button>
+                              
+                          </div>
+                          
+                      </div> 
+                  </div>
+                    
                 </div>
             </div>
         </div>
@@ -131,16 +132,17 @@ import { useRouter } from 'vue-router'
 import { ClockIcon, QuestionMarkCircleIcon, PlusIcon } from '@heroicons/vue/24/solid'
 import { ref, computed } from 'vue'
 import store from "../store"
-      import {
-        TransitionRoot,
-        TransitionChild,
-        Dialog,
-        DialogPanel,
-        DialogTitle,
-      } from '@headlessui/vue'
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/vue'
       
       const router = useRouter()
       const isOpen = ref(false)
+      const selectedQuiz = ref(null);
       
       function closeModal() {
         isOpen.value = false;
@@ -158,6 +160,8 @@ import store from "../store"
       function openModal(index) {
         isOpen.value = true;
         store.state.course = index;
+        store.commit('setSelectedQuiz', index)
+        console.log(getSelectedQuiz.value)
       }
       function newQuiz() {
         router.push({
@@ -166,10 +170,14 @@ import store from "../store"
       }
       function cancelModal(){
         isOpen.value = false;
+        store.commit('removeSelectedQuiz')
+        console.log("removed")
+        console.log(getSelectedQuiz.value)
+        
       }
 
       const name = computed(() => store.state.user.data.name )
       const quizs = store.state.quiz;
-      const test = computed(() => store.state.quiz[store.state.course-1] )
-
+      console.log(store.state.quiz);
+      const getSelectedQuiz =  computed(() => store.state.selectedQuiz );
 </script>

@@ -127,6 +127,7 @@ const store = createStore ({
         },
         quiz: [],
         course: null,
+        selectedQuiz: {},
         question: [],
         currentQuestionIndex: 0,
         answers: [],
@@ -162,6 +163,7 @@ const store = createStore ({
             state.user.token = userData.token;
             state.user.data = userData.user;
             sessionStorage.setItem("TOKEN", userData.token)
+            state.quiz = userData.quizzes
         },
         setQuestion:(state) => {
             for (const item of courses){
@@ -192,7 +194,7 @@ const store = createStore ({
             }
         },
         addNewQuiz(state, newQuiz){
-            state.quiz = newQuiz.quiz;
+            state.quiz = newQuiz.quizzes;
         },
         finish(state) {
             state.currentQuestionIndex = 0;
@@ -200,6 +202,12 @@ const store = createStore ({
             state.course = null;
             state.question = []
         },
+        setSelectedQuiz(state, index){
+            state.selectedQuiz = state.quiz.find(obj => obj.id === index);
+        },
+        removeSelectedQuiz(state){
+            state.selectedQuiz = {}
+        }
         
     },
     modules: {},

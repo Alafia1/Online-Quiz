@@ -42,8 +42,9 @@ class Quiz extends Controller
             'questions' => $data['questions'],
             'user_id' => $userId,
         ]);
+        $quizzes = Quizs::where('user_id', $userId)->get();
         return response([
-            'quiz' => $quiz
+            'quizzes' => $quizzes
         ]);
     }
 
